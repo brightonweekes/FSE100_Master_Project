@@ -54,13 +54,23 @@ def loop():
         dis = distance()
         print(dis, 'cm')  # Print distance measurement
 
-        if dis < 5:  # If the object is within 5 cm, buzz continuously
+        threshold_crossed = False
+
+        if TempHolder > PainThresholdC and threshold_crossed == False:  # If temperature exceeds threshold, buzz 
+            threshold_crossed = True
             buzzer_on()
-        elif dis < 30:  # If within 30 cm, beep with decreasing interval
-            beep_interval = (dis - 5) / 50.0  # Adjust beep interval
-            beep(beep_interval)
-        else:
-            buzzer_off()  # Turn off buzzer if object is far
+            time.sleep(0.5)  # Beep for 0.5 seconds
+            buzzer_off()
+        elif TempHolder < PainThresholdC and threshold_crossed == True:  # If temp lowers below threshold, reset the flag and beep twice
+            threshold_crossed = False
+            buzzer_on()
+            time.sleep(0.1)
+            buzzer_off()
+            time.sleep(0.1)
+            buzzer_on()
+            time.sleep(0.1)
+            buzzer_off()
+
         
         time.sleep(0.3)
 
